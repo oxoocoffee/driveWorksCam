@@ -45,9 +45,9 @@ class GmslTest
         void    pullUSB(void);
         void    pullGMSL(void);
 
-        void    onImageUpdate(uint32_t width,
-                              uint32_t height,
-                              char*    pBuffer);
+        void    onImageUpdate(uint32_t       width,
+                              uint32_t       height,
+                              const uint8_t* pBuffer);
 
         static void  nvLogCallback(dwContextHandle_t context,
                                    dwLoggerVerbosity type,
@@ -71,6 +71,7 @@ class GmslTest
     private:
         bool                    _keepRunning;
         bool                    _enableThreading;
+        bool                    _RCCB;
         uint32_t                _frameCount;
         uint32_t                _imageWidth;
         uint32_t                _imageHeight;
@@ -82,6 +83,7 @@ class GmslTest
         dwSensorHandle_t        _cameraSensor;
         dwCameraFrameHandle_t   _frameHandle;
         dwImageType             _camImageType;
+        dwImageCPU*             _imageCPU = nullptr;
 };
 
 #define NV_UNUSED(x) (void)x;

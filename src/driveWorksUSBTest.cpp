@@ -18,8 +18,8 @@ void GmslTest::processUSB(const string& camParam)
     dwStatus result = dwSAL_createSensor(&_cameraSensor, params, _salHandle);
 
     if (result != DW_SUCCESS)
-        throw std::runtime_error(string("Failed dwSAL_createSensor: ") + camParam +
-                                        ", Reason: " + dwGetStatusName(result) );
+        throw std::runtime_error(string("Failed dwSAL_createSensor: camera.usb, Reason: ")
+                                 + dwGetStatusName(result) );
 
     dwImageProperties cameraImageProperties;
 
@@ -28,8 +28,8 @@ void GmslTest::processUSB(const string& camParam)
     result = dwSensorCamera_getImageProperties(&cameraImageProperties, DW_CAMERA_RAW_IMAGE, _cameraSensor);
 
     if (result != DW_SUCCESS)
-        throw std::runtime_error(string("Failed dwSensorCamera_getImageProperties: ") + camParam +
-                                        ", Reason: " + dwGetStatusName(result) );
+        throw std::runtime_error(string("Failed dwSensorCamera_getImageProperties: camera.usb, Reason: ")
+                                        + dwGetStatusName(result) );
 
     _imageWidth  = cameraImageProperties.width;
     _imageHeight = cameraImageProperties.height;
@@ -41,8 +41,8 @@ void GmslTest::processUSB(const string& camParam)
     result = dwSensorCamera_getSensorProperties(&cameraProperties, _cameraSensor);
 
     if (result != DW_SUCCESS)
-        throw std::runtime_error(string("Failed dwSensorCamera_getSensorProperties: ") + camParam +
-                                        ", Reason: " + dwGetStatusName(result) );
+        throw std::runtime_error(string("Failed dwSensorCamera_getSensorProperties: camera.usb, Reason: ")
+                                        + dwGetStatusName(result) );
 
     std::ostringstream buff;
 
@@ -64,7 +64,7 @@ void GmslTest::processUSB(const string& camParam)
                 _threadId.join();
         }
         catch(const std::system_error& ex) {
-            throw runtime_error(string("Failed to spawn threadHandler, Reason: ") + ex.what() );
+            throw runtime_error(string("Failed to spawn camera.usb threadHandler, Reason: ") + ex.what() );
         }
     }
     else
@@ -73,14 +73,14 @@ void GmslTest::processUSB(const string& camParam)
 
 void GmslTest::enterUSBLoop(void)
 {
-    std::cout << "Entering " << _devType << " image pump" << std::endl;
+    std::cout << "Entering camera.usb image pump" << std::endl;
 
     dwStatus result = dwSensor_start(_cameraSensor);
 
     if (result != DW_SUCCESS)
     {
-        std::cerr << "Failed to enable streaming: "
-                  << _devType << ", Reason: " << dwGetStatusName(result);
+        std::cerr << "Failed to enable streaming: camera.usb, Reason: "
+                  << dwGetStatusName(result);
         _keepRunning = false;
         return;
     }
@@ -88,20 +88,23 @@ void GmslTest::enterUSBLoop(void)
     while(_keepRunning)
         pullUSB();
 
-    std::cout << "Entering " << _devType << " image pump" << std::endl;
+    std::cout << "Entering camera.usb image pump" << std::endl;
 }
 
 void GmslTest::pullUSB(void)
 {
-    const dwStatus result = dwSensorCamera_readFrame(&_frameHandle, 0, 50000, _cameraSensor);
+    dwStatus result = dwSensorCamera_readFrame(&_frameHandle, 0, 10000, _cameraSensor);
 
     if (DW_NOT_AVAILABLE == result)
     {
-        std::cerr << "Failed to read frame, Reason: " << dwGetStatusName(result);
+        std::cerr << "Failed to read camera.usb frame, Reason: " << dwGetStatusName(result);
         return;
     }
 
-    onImageUpdate(_imageWidth, _imageHeight, 0L);
+    if(DW_SUCCESS == dwSensorCamera_getImageCPU(&_imageCPU, DW_CAMERA_PROCESSED_IMAGE, _frameHandle))
+        onImageUpdate(_imageCPU->prop.width, _imageCPU->prop.height, _imageCPU->data[0]);
+
+    std::this_thread::yield();
 }
 
 #endif // DRIVE_WORK_FOUND

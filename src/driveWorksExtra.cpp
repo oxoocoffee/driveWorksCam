@@ -118,7 +118,7 @@ void GmslTest::printUsage(void)
               << "   -d usb:0"               << std::endl
               << "   -d gmls:camera-type=ar0231-rccb,csi-port=ab,camera-count=1,camera-mask=0001,output-format=yuv\"" << std::endl
               << "Future support"            << std::endl
-              << "   -f {rgb|yuv} enable output" << std::endl;
+              << "   -f {rgb|yuv|raw} enable output" << std::endl;
 }
 
 #endif // DRIVE_WORK_FOUND

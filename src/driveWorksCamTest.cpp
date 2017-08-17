@@ -7,7 +7,7 @@
 
 GmslTest::GmslTest(void)
     : _keepRunning(true), _enableThreading(false),
-      _frameCount(0), _imageWidth(0), _imageHeight(0),
+      _RCCB(false), _frameCount(0), _imageWidth(0), _imageHeight(0),
       _sdkHandle(DW_NULL_HANDLE), _salHandle(DW_NULL_HANDLE),
       _cameraSensor(DW_NULL_HANDLE), _frameHandle(DW_NULL_HANDLE)
 {
@@ -74,7 +74,9 @@ void GmslTest::initializeSDK(bool verbose)
         dwLogger_setLogLevel(DW_LOG_WARN);
 
     // instantiate Driveworks SDK context
-    dwContextParameters sdkParams = dwContextParameters();
+    dwContextParameters sdkParams;
+
+    std::memset(&sdkParams, 0, sizeof(dwContextParameters));
 
     dwStatus result = dwInitialize(&_sdkHandle, DW_VERSION, &sdkParams);
 
@@ -101,9 +103,9 @@ void GmslTest::cameraReaderHandler(void)
     std::cout << _devType << " thread finishing" << std::endl;
 }
 
-void GmslTest::onImageUpdate(uint32_t width,
-                             uint32_t height,
-                             char*    pBuffer)
+void GmslTest::onImageUpdate(uint32_t       width,
+                             uint32_t       height,
+                             const uint8_t* pBuffer)
 {
     NV_UNUSED(pBuffer)
 
@@ -111,8 +113,8 @@ void GmslTest::onImageUpdate(uint32_t width,
 
     if((_frameCount % 50) == 0)
     {
-        std::cout << _devType + " Got: " << width << "x" << height
-                  << " " << std::to_string(_frameCount) << " frames";
+        std::cout << _devType + " got: " << width << "x" << height
+                  << " " << std::to_string(_frameCount) << " frames" << std::endl << std::flush;
         _frameCount = 0;
     }
 }
