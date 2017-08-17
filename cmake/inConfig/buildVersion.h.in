@@ -1,0 +1,8 @@
+#ifndef BUILD_VERSION_H
+#define BUILD_VERSION_H
+
+#define DEBUG                   @DEFINE_DEBUG_BUILD@
+#define DRIVE_WORK_FOUND        @HAS_DRIVE_WORK@
+#define LINUX_SYSTEM            @LINUX_SYSTEM@
+
+#endif // BUILD_VERSION_H
