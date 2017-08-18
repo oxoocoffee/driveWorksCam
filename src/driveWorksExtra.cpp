@@ -111,12 +111,12 @@ bool GmslTest::findArg(const string& param, int32_t& paramVal) const
 void GmslTest::printUsage(void)
 {
     std::cout << "Usage: " << _argVec[0] << " -d {usb|gmsl}:{param} -t" << std::endl
-              << "   -d  : device info"      << std::endl
+              << "   -d  : device mode"      << std::endl
               << "   -t  : enable threading" << std::endl
               << "   -v  : verbose on"       << std::endl
               << "Examples"                  << std::endl
               << "   -d usb:0"               << std::endl
-              << "   -d gmls:camera-type=ar0231-rccb,csi-port=ab,camera-count=1,camera-mask=0001,output-format=yuv\"" << std::endl
+              << "   -d gmsl:camera-type=ar0231-rccb-ssc,csi-port=ab,fifo-size=3,interpolationDemosaic=0,offscreen=1,serializer-type=raw,slave=0,write-file=,output-format=raw+data" << std::endl
               << "Future support"            << std::endl
               << "   -f {rgb|yuv|raw} enable output" << std::endl;
 }

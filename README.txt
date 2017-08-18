@@ -14,7 +14,7 @@ driveWorksCamTest -d usb:0
 
 # To run GMSL mode
 
-driveWorksCamTest -d gmls:camera-type=ar0231-rccb,csi-port=ab,camera-count=1,camera-mask=0001,output-format=yuv
+driveWorksCamTest -d gmls:camera-type=ar0231-rccb-ssc,csi-port=ab,fifo-size=3,interpolationDemosaic=0,offscreen=1,serializer-type=raw,slave=0,write-file=,output-format=raw+data
 
 
 # USB call order

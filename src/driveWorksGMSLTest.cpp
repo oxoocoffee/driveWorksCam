@@ -9,11 +9,8 @@ void GmslTest::processGMSL(const string& camParam)
 {
     dwSensorParams params;
 
-    string parameters("device=");
-           parameters += camParam;
-
     params.protocol        = "camera.gmsl";
-    params.parameters      = parameters.c_str();
+    params.parameters      = camParam.c_str();
 
     dwStatus result = dwSAL_createSensor(&_cameraSensor, params, _salHandle);
 
