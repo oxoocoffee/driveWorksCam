@@ -5,7 +5,7 @@ $ make VERBOSE=1
 
 # To cross-compile create build-cross/ folder and change path to it
 $ cd {SOME_PATH}/driveWorksCam/build-cross/
-$ cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/modules/Toolchain-V4L.cmake ..
+$ cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain-linux-driveworks.cmake ..
 $ make VERBOSE=1
 
 # To run USB mode
